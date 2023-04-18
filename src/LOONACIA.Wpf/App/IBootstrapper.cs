@@ -3,5 +3,5 @@
 namespace LOONACIA.Wpf.App;
 public interface IBootstrapper
 {
-    void ConfigureServices(IServiceCollection services);
+	void ConfigureServices(IServiceCollection services);
 }

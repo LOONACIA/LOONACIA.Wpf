@@ -38,6 +38,12 @@ public class AppBuilder<T> where T : Application, new()
 		return this;
 	}
 
+	public AppBuilder<T> BootstrapWith<TBootstrapper>()
+		where TBootstrapper : IBootstrapper, new()
+	{
+		return BootstrapWith(new TBootstrapper());
+	}
+
 	public T Build()
 	{
 		_ioc ??= Ioc.Default;
