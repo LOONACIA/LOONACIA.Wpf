@@ -4,8 +4,8 @@ using System.Windows;
 namespace LOONACIA.Wpf;
 public static class ApplicationExtension
 {
-	public static AppBuilder<T> CreateBuilder<T>(this T app) where T : Application, new()
+	public static LunaAppBuilder<T> CreateBuilder<T>(this T app) where T : Application, new()
 	{
-		return new AppBuilder<T>(app);
+		return new LunaAppBuilder<T>(app);
 	}
 }
