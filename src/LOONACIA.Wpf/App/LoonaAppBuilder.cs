@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Windows;
 
 namespace LOONACIA.Wpf.App;
-public class LunaAppBuilder<T> where T : Application, new()
+public class LoonaAppBuilder<T> where T : Application, new()
 {
 	private readonly List<IBootstrapper> _bootstrappers = new();
 
@@ -17,43 +17,43 @@ public class LunaAppBuilder<T> where T : Application, new()
 
 	private Ioc? _ioc;
 
-	public LunaAppBuilder()
+	public LoonaAppBuilder()
 	{
 		_services = new ServiceCollection();
 	}
 
-	public LunaAppBuilder(T application) : this()
+	public LoonaAppBuilder(T application) : this()
 	{
 		_application = application;
 	}
 
-	public static LunaAppBuilder<T> Create() => new();
+	public static LoonaAppBuilder<T> Create() => new();
 
-	public LunaAppBuilder<T> WithIoc(Ioc ioc)
+	public LoonaAppBuilder<T> WithIoc(Ioc ioc)
 	{
 		_ioc = ioc;
 		return this;
 	}
 
-	public LunaAppBuilder<T> BootstrapWith(IBootstrapper bootstrapper)
+	public LoonaAppBuilder<T> BootstrapWith(IBootstrapper bootstrapper)
 	{
 		_bootstrappers.Add(bootstrapper);
 		return this;
 	}
 
-	public LunaAppBuilder<T> AddResource(ResourceDictionary resourceDictionary)
+	public LoonaAppBuilder<T> AddResource(ResourceDictionary resourceDictionary)
 	{
 		_resources.Add(resourceDictionary);
 		return this;
 	}
 
-	public LunaAppBuilder<T> AddResource<TResource>()
+	public LoonaAppBuilder<T> AddResource<TResource>()
 		where TResource : ResourceDictionary, new()
 	{
 		return AddResource(new TResource());
 	}
 
-	public LunaAppBuilder<T> AddResource(Uri resourceUri)
+	public LoonaAppBuilder<T> AddResource(Uri resourceUri)
 	{
 		return AddResource(new ResourceDictionary()
 		{
@@ -61,12 +61,12 @@ public class LunaAppBuilder<T> where T : Application, new()
 		});
 	}
 
-	public LunaAppBuilder<T> AddResource(string packUri)
+	public LoonaAppBuilder<T> AddResource(string packUri)
 	{
 		return AddResource(new Uri(packUri, UriKind.RelativeOrAbsolute));
 	}
 
-	public LunaAppBuilder<T> BootstrapWith<TBootstrapper>()
+	public LoonaAppBuilder<T> BootstrapWith<TBootstrapper>()
 		where TBootstrapper : IBootstrapper, new()
 	{
 		return BootstrapWith(new TBootstrapper());
