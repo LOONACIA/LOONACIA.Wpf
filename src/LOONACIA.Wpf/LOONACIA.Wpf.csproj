@@ -13,7 +13,16 @@
     <RepositoryUrl>https://github.com/LOONACIA/LOONACIA.Wpf</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>LOONACIA, wpf</PackageTags>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
