@@ -9,7 +9,7 @@ public class LoonaAppBuilder<T> where T : Application, new()
 {
 	private readonly List<IBootstrapper> _bootstrappers = new();
 
-	private readonly List<ResourceDictionary> _resources = new();
+	private readonly List<Func<ResourceDictionary>> _resourceFactory = new();
 
 	private readonly IServiceCollection _services;
 
@@ -43,22 +43,24 @@ public class LoonaAppBuilder<T> where T : Application, new()
 
 	public LoonaAppBuilder<T> AddResource(ResourceDictionary resourceDictionary)
 	{
-		_resources.Add(resourceDictionary);
+		_resourceFactory.Add(() => resourceDictionary);
 		return this;
 	}
 
 	public LoonaAppBuilder<T> AddResource<TResource>()
 		where TResource : ResourceDictionary, new()
 	{
-		return AddResource(new TResource());
+		_resourceFactory.Add(() => new TResource());
+		return this;
 	}
 
 	public LoonaAppBuilder<T> AddResource(Uri resourceUri)
 	{
-		return AddResource(new ResourceDictionary()
+		_resourceFactory.Add(() => new ResourceDictionary()
 		{
 			Source = resourceUri
 		});
+		return this;
 	}
 
 	public LoonaAppBuilder<T> AddResource(string packUri)
@@ -84,9 +86,10 @@ public class LoonaAppBuilder<T> where T : Application, new()
 		_ioc.ConfigureServices(_services.BuildServiceProvider());
 
 		T app = _application ?? new();
-		foreach (var resource in _resources)
+
+		foreach (var getResource in _resourceFactory)
 		{
-			app.Resources.MergedDictionaries.Add(resource);
+			app.Resources.MergedDictionaries.Add(getResource());
 		}
 
 		return app;
