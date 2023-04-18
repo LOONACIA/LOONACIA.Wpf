@@ -14,17 +14,17 @@ public class AppBuilder<T> where T : Application, new()
 
 	private Ioc? _ioc;
 
-    public AppBuilder()
-    {
-        _services = new ServiceCollection();
-    }
+	public AppBuilder()
+	{
+		_services = new ServiceCollection();
+	}
 
-    public AppBuilder(T application) : this()
-    {
-        _application = application;
-    }
+	public AppBuilder(T application) : this()
+	{
+		_application = application;
+	}
 
-    public static AppBuilder<T> Create() => new();
+	public static AppBuilder<T> Create() => new();
 
 	public AppBuilder<T> WithIoc(Ioc ioc)
 	{

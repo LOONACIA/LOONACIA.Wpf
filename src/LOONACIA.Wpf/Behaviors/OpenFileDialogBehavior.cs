@@ -73,7 +73,7 @@ public class OpenFileDialogBehavior : Behavior<ButtonBase>
 		{
 			ofd.InitialDirectory = InitialDirectory;
 		}
-		
+
 		if (ofd.ShowDialog() is not true)
 		{
 			return;
