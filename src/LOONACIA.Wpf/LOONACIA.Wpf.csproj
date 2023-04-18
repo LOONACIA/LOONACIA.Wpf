@@ -7,14 +7,14 @@
     <Title>LOONACIA.Wpf</Title>
     <Authors>LOONACIA</Authors>
     <Product>LOONACIA.Wpf</Product>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Copyright>Copyright 2023. LOONACIA All rights reserved.</Copyright>
 	<PackageProjectUrl>https://github.com/LOONACIA/LOONACIA.Wpf</PackageProjectUrl>
     <RepositoryUrl>https://github.com/LOONACIA/LOONACIA.Wpf</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>LOONACIA, wpf</PackageTags>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
