@@ -3,11 +3,31 @@
 ## How to use
 **Define Application class**
 ```csharp
-class MyApp : Application
+class MyApp : LoonaciaApp
 {
+	public MyApp(IServiceProvider serviceProvider) : base(serviceProvider)
+	{
+	}
+
+	protected override Window CreateWindow() => new MyWindow();
 }
 ```
 
+**In entry point**
+```csharp
+class Entry
+{
+	[STAThread]
+	public static void Main()
+	{
+		LoonaciaAppBuilder<MyApp>.Create()
+			.Build()
+			.Run();
+	}
+}
+```
+
+### Add Bootstrapper
 **Define Bootstrapper**
 ```csharp
 class MyBootstrapper : IBootstrapper
@@ -21,41 +41,53 @@ class MyBootstrapper : IBootstrapper
 
 **In entry point**
 ```csharp
-class Entry
+LoonaciaAppBuilder<MyApp>.Create()
+	.BootstrapWith<MyBootstrapper>()
+	.Build()
+	.Run();
+```
+
+### Merge resource dictionaries
+1. Using pack uri
+
+```csharp
+string packuri = "My ResourceDictionary uri to merge here";
+
+LoonaciaAppBuilder<MyApp>.Create()
+	.BootstrapWith<MyBootstrapper>()
+	.AddResource(packuri)
+	.Build()
+	.Run();
+```
+
+2. Using ResourceDictionary class
+
+**Define ResourceDictionary class**
+```csharp
+public class MyResource : ResourceDictionary
 {
-	[STAThread]
-	public static void Main()
+	public MyResource()
 	{
-		string packuri = "My ResourceDictionary uri to merge here";
-
-		var builder = new LoonaAppBuilder<MyApp>()
-			.WithIoc(MyIocInstance) // If you use Ioc.Default, can skip this line.
-			.BootstrapWith<MyBootstrapper>()
-			.AddResource<MyResourceDictionaryClass>()
-			.AddResource(packuri);
-
-		MyApp app = builder.Build();
-		app.Run();
+		InitializeComponent();
 	}
 }
 ```
+**In entry point**
+```csharp
+LoonaciaAppBuilder<MyApp>.Create()
+	.BootstrapWith<MyBootstrapper>()
+	.AddResource<MyResource>()
+	.Build()
+	.Run();
+```
+
+### Resolve the dependencies
+```csharp
+T? service = LoonaciaApp.GetService<T>();
+T service = LoonaciaApp.GetRequiredService<T>();
+```
 or
 ```csharp
-class Entry
-{
-	[STAThread]
-	public static void Main()
-	{
-		string packuri = "My ResourceDictionary uri to merge here";
-
-		LoonaAppBuilder<MyApp>
-			.Create()
-			.WithIoc(MyIocInstance) // If you use Ioc.Default, can skip this line.
-			.BootstrapWith<MyBootstrapper>()
-			.AddResource<MyResourceDictionaryClass>()
-			.AddResource(packuri)
-			.Build()
-			.Run();
-	}
-}
+T? service = (Application.Current as LoonaciaApp).ServiceProvider.GetService<T>();
+T service = (Application.Current as LoonaciaApp).ServiceProvider.GetRequiredService<T>();
 ```

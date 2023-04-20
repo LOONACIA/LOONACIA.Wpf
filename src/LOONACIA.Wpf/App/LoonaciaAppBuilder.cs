@@ -1,11 +1,10 @@
-﻿using CommunityToolkit.Mvvm.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 
 namespace LOONACIA.Wpf.App;
-public class LoonaAppBuilder<T> where T : Application, new()
+public class LoonaciaAppBuilder<T> where T : LoonaciaApp
 {
 	private readonly List<IBootstrapper> _bootstrappers = new();
 
@@ -15,46 +14,38 @@ public class LoonaAppBuilder<T> where T : Application, new()
 
 	private readonly T? _application;
 
-	private Ioc? _ioc;
-
-	public LoonaAppBuilder()
+	public LoonaciaAppBuilder()
 	{
 		_services = new ServiceCollection();
 	}
 
-	public LoonaAppBuilder(T application) : this()
+	public LoonaciaAppBuilder(T application) : this()
 	{
 		_application = application;
 	}
 
-	public static LoonaAppBuilder<T> Create() => new();
+	public static LoonaciaAppBuilder<T> Create() => new();
 
-	public LoonaAppBuilder<T> WithIoc(Ioc ioc)
-	{
-		_ioc = ioc;
-		return this;
-	}
-
-	public LoonaAppBuilder<T> BootstrapWith(IBootstrapper bootstrapper)
+	public LoonaciaAppBuilder<T> BootstrapWith(IBootstrapper bootstrapper)
 	{
 		_bootstrappers.Add(bootstrapper);
 		return this;
 	}
 
-	public LoonaAppBuilder<T> AddResource(ResourceDictionary resourceDictionary)
+	public LoonaciaAppBuilder<T> AddResource(ResourceDictionary resourceDictionary)
 	{
 		_resourceFactory.Add(() => resourceDictionary);
 		return this;
 	}
 
-	public LoonaAppBuilder<T> AddResource<TResource>()
+	public LoonaciaAppBuilder<T> AddResource<TResource>()
 		where TResource : ResourceDictionary, new()
 	{
 		_resourceFactory.Add(() => new TResource());
 		return this;
 	}
 
-	public LoonaAppBuilder<T> AddResource(Uri resourceUri)
+	public LoonaciaAppBuilder<T> AddResource(Uri resourceUri)
 	{
 		_resourceFactory.Add(() => new ResourceDictionary()
 		{
@@ -63,12 +54,12 @@ public class LoonaAppBuilder<T> where T : Application, new()
 		return this;
 	}
 
-	public LoonaAppBuilder<T> AddResource(string packUri)
+	public LoonaciaAppBuilder<T> AddResource(string packUri)
 	{
 		return AddResource(new Uri(packUri, UriKind.RelativeOrAbsolute));
 	}
 
-	public LoonaAppBuilder<T> BootstrapWith<TBootstrapper>()
+	public LoonaciaAppBuilder<T> BootstrapWith<TBootstrapper>()
 		where TBootstrapper : IBootstrapper, new()
 	{
 		return BootstrapWith(new TBootstrapper());
@@ -76,16 +67,9 @@ public class LoonaAppBuilder<T> where T : Application, new()
 
 	public T Build()
 	{
-		_ioc ??= Ioc.Default;
+		IServiceProvider serviceProvider = Bootstrap();
 
-		foreach (var bootstrap in _bootstrappers)
-		{
-			bootstrap.ConfigureServices(_services);
-		}
-
-		_ioc.ConfigureServices(_services.BuildServiceProvider());
-
-		T app = _application ?? new();
+		T app = _application ?? serviceProvider.CreateInstanceForUnregisteredType<T>();
 
 		foreach (var getResource in _resourceFactory)
 		{
@@ -93,5 +77,15 @@ public class LoonaAppBuilder<T> where T : Application, new()
 		}
 
 		return app;
+	}
+
+	protected virtual IServiceProvider Bootstrap()
+	{
+		foreach (var bootstrap in _bootstrappers)
+		{
+			bootstrap.ConfigureServices(_services);
+		}
+
+		return _services.BuildServiceProvider();
 	}
 }
