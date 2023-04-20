@@ -64,7 +64,7 @@ LoonaciaAppBuilder<MyApp>.Create()
 
 **Define ResourceDictionary class**
 ```csharp
-public class MyResource : ResourceDictionary
+public partial class MyResource : ResourceDictionary
 {
 	public MyResource()
 	{
