@@ -1,0 +1,8 @@
+﻿<ResourceDictionary x:Class="LOONACIA.Wpf.Example.Resources.AppResource"
+					xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+	<sys:String x:Key="AppDisplayName">LOONACIA.Wpf</sys:String>
+	
+</ResourceDictionary>
