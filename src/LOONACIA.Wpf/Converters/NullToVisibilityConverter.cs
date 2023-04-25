@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace LOONACIA.Wpf.Converters;
-internal class NullToVisibilityConverter : IValueConverter
+public class NullToVisibilityConverter : IValueConverter
 {
 	/// <summary>
 	/// Gets or sets a converter is inverted. If true, return <see cref="Visibility.Visible"/> when value is null. otherwise, return <see cref="Visibility.Visible"/> when value is not null.
