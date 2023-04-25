@@ -1,5 +1,5 @@
 ﻿using LOONACIA.Wpf.App;
-using LOONACIA.Wpf.Example.Bootstrappers;
+using LOONACIA.Wpf.Example.Bootstrap;
 using LOONACIA.Wpf.Example.Resources;
 using System;
 
