@@ -5,6 +5,10 @@
 	<Style TargetType="{x:Type controls:PlaceholderTextBox}"
 		   BasedOn="{StaticResource {x:Type TextBox}}">
 
+		<Setter Property="PlaceholderBrush" Value="#AA000000"/>
+
+		<Setter Property="CornerRadius" Value="4"/>
+		
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="HorizontalContentAlignment" Value="Left"/>
 
@@ -15,13 +19,14 @@
 					<Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-							Padding="{TemplateBinding Padding}">
+							Padding="{TemplateBinding Padding}"
+							CornerRadius="{TemplateBinding CornerRadius}">
 					
 						<Grid>
 							<ScrollViewer x:Name="PART_ContentHost"/>
 							<TextBlock x:Name="PlaceholderPresenter" 
 									   IsHitTestVisible="False"
-                                       Foreground="#AA000000"
+                                       Foreground="{TemplateBinding PlaceholderBrush}"
 									   Visibility="Collapsed"
 									   Padding="2 0"
 									   FontStyle="Italic"
