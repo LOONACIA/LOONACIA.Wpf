@@ -6,13 +6,13 @@ using System.Windows;
 namespace LOONACIA.Wpf.App;
 public class LoonaciaAppBuilder<T> where T : LoonaciaApp
 {
-	private readonly List<IBootstrapper> _bootstrappers = new();
-
 	private readonly List<Func<ResourceDictionary>> _resourceFactory = new();
 
 	private readonly IServiceCollection _services;
 
 	private readonly T? _application;
+
+	private IBootstrapper? _bootstrapper;
 
 	public LoonaciaAppBuilder()
 	{
@@ -28,7 +28,12 @@ public class LoonaciaAppBuilder<T> where T : LoonaciaApp
 
 	public LoonaciaAppBuilder<T> BootstrapWith(IBootstrapper bootstrapper)
 	{
-		_bootstrappers.Add(bootstrapper);
+		if (_bootstrapper != null && ReferenceEquals(_bootstrapper, bootstrapper))
+		{
+			throw new InvalidOperationException("AppBuilder is already wired with another bootstrapper.");
+		}
+
+		_bootstrapper = bootstrapper;
 		return this;
 	}
 
@@ -81,10 +86,7 @@ public class LoonaciaAppBuilder<T> where T : LoonaciaApp
 
 	protected virtual IServiceProvider Bootstrap()
 	{
-		foreach (var bootstrap in _bootstrappers)
-		{
-			bootstrap.ConfigureServices(_services);
-		}
+		_bootstrapper?.ConfigureServices(_services);
 
 		return _services.BuildServiceProvider();
 	}
