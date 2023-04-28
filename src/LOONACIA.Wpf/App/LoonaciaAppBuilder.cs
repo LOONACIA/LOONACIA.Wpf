@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 
 namespace LOONACIA.Wpf.App;
@@ -10,18 +12,17 @@ public class LoonaciaAppBuilder<T> where T : LoonaciaApp
 
 	private readonly IServiceCollection _services;
 
-	private readonly T? _application;
-
 	private IBootstrapper? _bootstrapper;
+
+	private LoonaciaAppBuilderContext? _appBuilderContext;
+
+	private IConfiguration? _appConfiguration;
+
+	private IServiceProvider? _appServiceProvider;
 
 	public LoonaciaAppBuilder()
 	{
 		_services = new ServiceCollection();
-	}
-
-	public LoonaciaAppBuilder(T application) : this()
-	{
-		_application = application;
 	}
 
 	public static LoonaciaAppBuilder<T> Create() => new();
@@ -72,9 +73,9 @@ public class LoonaciaAppBuilder<T> where T : LoonaciaApp
 
 	public T Build()
 	{
-		IServiceProvider serviceProvider = Bootstrap();
+		Bootstrap();
 
-		T app = _application ?? serviceProvider.CreateInstanceForUnregisteredType<T>();
+		T app = _appServiceProvider.CreateInstanceForUnregisteredType<T>();
 
 		foreach (var getResource in _resourceFactory)
 		{
@@ -84,10 +85,37 @@ public class LoonaciaAppBuilder<T> where T : LoonaciaApp
 		return app;
 	}
 
-	protected virtual IServiceProvider Bootstrap()
+	[MemberNotNull(nameof(_appConfiguration))]
+	[MemberNotNull(nameof(_appServiceProvider))]
+	private void Bootstrap()
 	{
-		_bootstrapper?.ConfigureServices(_services);
+		InitializeAppConfiguration();
+		InitializeBuilderContext();
+		InitializeAppServiceProvider();
+	}
 
-		return _services.BuildServiceProvider();
+	[MemberNotNull(nameof(_appBuilderContext))]
+	private void InitializeBuilderContext()
+	{
+		_appBuilderContext = new()
+		{
+			Configuration = _appConfiguration!
+		};
+	}
+
+	[MemberNotNull(nameof(_appConfiguration))]
+	private void InitializeAppConfiguration()
+	{
+		ConfigurationBuilder builder = new();
+		_bootstrapper?.ConfigureAppConfiguration(builder);
+		_appConfiguration = builder.Build();
+	}
+
+	[MemberNotNull(nameof(_appServiceProvider))]
+	private void InitializeAppServiceProvider()
+	{
+		_bootstrapper?.ConfigureServices(_appBuilderContext!, _services);
+
+		_appServiceProvider = _services.BuildServiceProvider();
 	}
 }

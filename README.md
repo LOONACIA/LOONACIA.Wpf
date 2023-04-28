@@ -32,7 +32,11 @@ class Entry
 ```csharp
 class MyBootstrapper : IBootstrapper
 {
-	public void ConfigureServices(IServiceCollection services)
+	public void ConfigureAppConfiguration(IConfigurationBuilder builder)
+	{
+	}
+
+	public void ConfigureServices(LoonaciaAppBuilderContext context, IServiceCollection services)
 	{
 		// Register services here.
 	}

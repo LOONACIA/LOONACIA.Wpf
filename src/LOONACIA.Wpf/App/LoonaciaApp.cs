@@ -10,7 +10,7 @@ public abstract class LoonaciaApp : Application
 		ServiceProvider = serviceProvider;
 	}
 
-	public IServiceProvider ServiceProvider { get; }
+	public IServiceProvider ServiceProvider { get; internal set; }
 
 	public static T? GetService<T>() where T : class
 	{

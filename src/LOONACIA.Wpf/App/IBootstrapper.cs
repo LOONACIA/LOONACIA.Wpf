@@ -1,7 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LOONACIA.Wpf.App;
 public interface IBootstrapper
 {
-	void ConfigureServices(IServiceCollection services);
+	void ConfigureAppConfiguration(IConfigurationBuilder builder);
+
+	void ConfigureServices(LoonaciaAppBuilderContext context, IServiceCollection services);
 }
