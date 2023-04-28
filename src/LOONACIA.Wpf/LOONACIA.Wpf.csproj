@@ -7,7 +7,7 @@
     <Title>LOONACIA.Wpf</Title>
     <Authors>LOONACIA</Authors>
     <Product>LOONACIA.Wpf</Product>
-    <Version>1.3.1</Version>
+    <Version>1.4.0</Version>
     <Copyright>Copyright 2023. LOONACIA All rights reserved.</Copyright>
 	<PackageProjectUrl>https://github.com/LOONACIA/LOONACIA.Wpf</PackageProjectUrl>
     <RepositoryUrl>https://github.com/LOONACIA/LOONACIA.Wpf</RepositoryUrl>
@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
